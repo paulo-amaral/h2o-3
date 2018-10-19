@@ -2,6 +2,7 @@ package ai.h2o.jetty8.proxy;
 
 import water.H2O;
 import water.init.HostnameGuesser;
+import water.server.Credentials;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -11,7 +12,7 @@ import java.security.GeneralSecurityException;
 
 public class Jetty8ProxyStarter {
 
-  public static String start(String[] args, Jetty8Proxy.Credentials credentials, String proxyTo,
+  public static String start(String[] args, Credentials credentials, String proxyTo,
                              boolean useHostname) {
     if (! proxyTo.endsWith("/"))
       proxyTo = proxyTo + "/";
@@ -40,7 +41,7 @@ public class Jetty8ProxyStarter {
     return hostname;
   }
 
-  private static Jetty8Proxy initializeProxy(H2O.BaseArgs args, Jetty8Proxy.Credentials credentials, String proxyTo) {
+  private static Jetty8Proxy initializeProxy(H2O.BaseArgs args, Credentials credentials, String proxyTo) {
     int proxyPort = args.port == 0 ? args.baseport : args.port;
 
     Jetty8Proxy proxy = new Jetty8Proxy(args, credentials, proxyTo);
@@ -92,7 +93,7 @@ public class Jetty8ProxyStarter {
 
   // just for local testing
   public static void main(String[] args) {
-    Jetty8Proxy.Credentials cred = Jetty8Proxy.Credentials.make(System.getProperty("user.name"), "Heslo123");
+    Credentials cred = Credentials.make(System.getProperty("user.name"), "Heslo123");
     String url = start(args, cred, "https://localhost:54321/", false);
     System.out.println("Proxy started on " + url + " " + cred.toDebugString());
   }
