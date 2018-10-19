@@ -1,7 +1,13 @@
-package water;
+package ai.h2o.jetty8;
 
 import org.eclipse.jetty.plus.jaas.JAASLoginService;
-import org.eclipse.jetty.security.*;
+import org.eclipse.jetty.security.Authenticator;
+import org.eclipse.jetty.security.ConstraintMapping;
+import org.eclipse.jetty.security.ConstraintSecurityHandler;
+import org.eclipse.jetty.security.DefaultIdentityService;
+import org.eclipse.jetty.security.HashLoginService;
+import org.eclipse.jetty.security.IdentityService;
+import org.eclipse.jetty.security.LoginService;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.security.authentication.FormAuthenticator;
 import org.eclipse.jetty.server.Connector;
@@ -17,6 +23,7 @@ import org.eclipse.jetty.server.ssl.SslSocketConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
+import water.H2O;
 import water.util.Log;
 
 import javax.servlet.ServletException;
@@ -25,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
-public abstract class AbstractHTTPD {
+public abstract class AbstractJetty8HTTPD {
 
   private final H2O.BaseArgs _args;
 
@@ -35,7 +42,7 @@ public abstract class AbstractHTTPD {
   // Jetty server object.
   protected Server _server;
 
-  protected AbstractHTTPD(H2O.BaseArgs args) {
+  protected AbstractJetty8HTTPD(H2O.BaseArgs args) {
     _args = args;
   }
 
@@ -169,7 +176,7 @@ public abstract class AbstractHTTPD {
       if (_args.form_auth) {
         BasicAuthenticator basicAuthenticator = new BasicAuthenticator();
         FormAuthenticator formAuthenticator = new FormAuthenticator("/login", "/loginError", false);
-        authenticator = new DelegatingAuthenticator(basicAuthenticator, formAuthenticator);
+        authenticator = new Jetty8DelegatingAuthenticator(basicAuthenticator, formAuthenticator);
       } else {
         authenticator = new BasicAuthenticator();
       }

@@ -1,5 +1,6 @@
-package water;
+package ai.h2o.jetty8.proxy;
 
+import ai.h2o.jetty8.AbstractJetty8HTTPD;
 import org.eclipse.jetty.client.HttpExchange;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Request;
@@ -10,6 +11,8 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.servlets.ProxyServlet;
 import org.eclipse.jetty.util.B64Code;
 import org.eclipse.jetty.util.security.Credential;
+import water.H2O;
+import water.network.SecurityUtils;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -21,14 +24,12 @@ import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
-import water.network.SecurityUtils;
-
-public class JettyProxy extends AbstractHTTPD {
+public class Jetty8Proxy extends AbstractJetty8HTTPD {
 
   private final String _proxyTo;
   private final Credentials _credentials;
 
-  public JettyProxy(H2O.BaseArgs args, Credentials credentials, String proxyTo) {
+  public Jetty8Proxy(H2O.BaseArgs args, Credentials credentials, String proxyTo) {
     super(args);
     _proxyTo = proxyTo;
     _credentials = credentials;
